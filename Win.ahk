@@ -9,15 +9,18 @@ class Win {
     __New(_wintitle) {
         this.HWND := WinExist(_wintitle)
         if (this.HWND)
-            this.Class := WinGetClass()
-                , this.PID := WinGetPID()
-                , this.Transparency := WinGetTransparent()
+            this.Class := WinGetClass(this.HWND)
+                , this.PID := WinGetPID(this.HWND)
         Win[this.HWND] := this
     }
+    Transparency => WinGetTransparent(this) or 255
+    /**
+     * @returns {Win}
+     */
     static __Item[_wintitle] {
-        Get => this.Info[WinExist(_wintitle)]
+        Get => (wHWND := WinExist(_wintitle)) ? (this.Info.Has(wHWND) ? this.Info.Get(wHWND) : Win(wHWND)) : {}
         Set => this.Info[WinExist(_wintitle)] := Value
     }
 }
 Win("A")
-OutputDebug(":{tk!}:" Win["ahk_exe WindowsTerminal.exe"].Transparency)
+OutputDebug("trans:" Win["A"].Transparency ":")
