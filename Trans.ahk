@@ -3,7 +3,7 @@
 #Include Win.ahk
 ;
 class Trans {
-    static stepcnt := 4
+    static stepcnt := 6
         , min := 125
         , steps := this.MakeSteps()
     static SetHalf(_wintitle?) => WinExist(_wintitle ?? "A") and WinSetTransparent(255 // 2)
