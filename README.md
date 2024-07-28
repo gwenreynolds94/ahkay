@@ -1,3 +1,4 @@
-# ahkayahKayyy
+# ahkay
+***My current AutoHotkey setup
 
 ...
