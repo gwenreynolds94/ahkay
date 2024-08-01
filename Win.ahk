@@ -22,5 +22,3 @@ class Win {
         Set => this.Info[WinExist(_wintitle)] := Value
     }
 }
-Win("A")
-OutputDebug("trans:" Win["A"].Transparency ":")

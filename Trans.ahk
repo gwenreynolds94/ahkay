@@ -1,6 +1,7 @@
 #Requires AutoHotkey v2.0+
 ;
 #Include Win.ahk
+#Include dbgo.ahk
 ;
 class Trans {
     static stepcnt := 6
@@ -30,7 +31,7 @@ class Trans {
             }
         }
         WinSetTransparent(prevStep, wHWND)
-        OutputDebug("win:trans:{" prevStep "-}")
+        dbgo("trans", prevStep)
         Tooltip prevStep
         SetTimer((*) => Tooltip(), -2000)
     }
@@ -47,12 +48,8 @@ class Trans {
             }
         }
         WinSetTransparent(nextStep, wHWND)
-        OutputDebug("win:trans:{" nextStep "+}")
+        dbgo("trans", nextStep)
         Tooltip nextStep
         SetTimer((*) => Tooltip(), -2000)
     }
 }
-asd := Trans.steps[1]
-loop Trans.steps.Length - 1
-    asd .= ":" Trans.steps[A_Index + 1]
-OutputDebug asd
