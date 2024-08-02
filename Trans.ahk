@@ -31,7 +31,7 @@ class Trans {
             }
         }
         WinSetTransparent(prevStep, wHWND)
-        dbgo("trans", prevStep)
+        dbgo("trans:" wHWND, prevStep)
         Tooltip prevStep
         SetTimer((*) => Tooltip(), -2000)
     }
@@ -48,7 +48,7 @@ class Trans {
             }
         }
         WinSetTransparent(nextStep, wHWND)
-        dbgo("trans", nextStep)
+        dbgo("trans:" wHWND, nextStep)
         Tooltip nextStep
         SetTimer((*) => Tooltip(), -2000)
     }

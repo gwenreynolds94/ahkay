@@ -3,7 +3,7 @@
 #SingleInstance Force
 ;
 #Include Trans.ahk
-#Include TogWin.ahk
+#Include Wink.ahk
 ;
 Persistent()
 ;
@@ -24,6 +24,19 @@ Hotkey "+#w", (*) => (Run("C:\Users\" A_UserName "\proggers\SysInternals\Debugvi
 Hotkey "sc029 & 1", (*) => Trans.PrevStep()
 Hotkey "sc029 & 2", (*) => Trans.NextStep()
 sc029::sc029
+
+Wink("+#0","#0","000")
+Wink("+#9","#9","999")
+Wink("+#8","#8","888")
+Wink("+#7","#7","777")
+Wink("+#6","#6","666")
+Wink("+#5","#5","555")
+Wink("+#4","#4","444")
+Wink("+#3","#3","333")
+Wink("+#2","#2","222")
+Wink("+#1","#1","111")
+
+
 ;
 /**
 WindowToggles := {
