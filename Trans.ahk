@@ -3,10 +3,12 @@
 #Include Win.ahk
 #Include dbgo.ahk
 ;
-class Trans {
+class trans {
     static stepcnt := 6
         , min := 125
         , steps := this.MakeSteps()
+        , PrevStep := ObjBindMethod(trans, "__PrevStep", "A")
+        , NextStep := ObjBindMethod(trans, "__NextStep", "A")
     static SetHalf(_wintitle?) => WinExist(_wintitle ?? "A") and WinSetTransparent(255 // 2)
     static SetFull(_wintitle?) => WinExist(_wintitle ?? "A") and WinSetTransparent(255)
     static MakeSteps() {
@@ -17,7 +19,7 @@ class Trans {
         steps.Push 255
         return steps
     }
-    static PrevStep(_wintitle?) {
+    static __PrevStep(_wintitle?, *) {
         wHWND := WinExist(_wintitle ?? "A")
         if not wHWND
             return
@@ -35,7 +37,7 @@ class Trans {
         Tooltip prevStep
         SetTimer((*) => Tooltip(), -2000)
     }
-    static NextStep(_wintitle?) {
+    static __NextStep(_wintitle?, *) {
         wHWND := WinExist(_wintitle ?? "A")
         if not wHWND
             return

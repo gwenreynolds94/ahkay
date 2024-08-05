@@ -3,9 +3,11 @@
 #SingleInstance Force
 ;
 #Include tip.ahk
+#Include prefs.ahk
 ;
-class Wink {
+class wink {
     static lastid := 0
+         , prefs := prefs("prefs", "wink")
     _SetHWND_ := ObjBindMethod(this, "SetHWND")
     , _Switch_ := ObjBindMethod(this, "Switch")
     , _enabled_ := false
@@ -15,9 +17,9 @@ class Wink {
     , _set_hwnd_key_ := ""
     , _switch_key_ := ""
     , id := 0
-    __New(_set_hwnd_key?, _switch_key?, _name?) {
-        this.id := Wink.lastid++
-        this.name := _name ?? this.id
+    __New(_name, _set_hwnd_key?, _switch_key?) {
+        this.id := wink.lastid++
+        this.name := _name
         if IsSet(_set_hwnd_key)
             this.SetHWNDKey := _set_hwnd_key
         if IsSet(_switch_key)
