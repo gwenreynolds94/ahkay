@@ -1,0 +1,10 @@
+{
+    "AutoHotkey2.AutoLibInclude": "All",
+    "AutoHotkey2.Warn.LocalSameAsGlobal": true,
+    "AutoHotkey2.Syntaxes": "C:\\Users\\River\\Documents\\AutoHotkey\\.syndefs",
+    "betterAlign.alignAfterTypeEnter": false,
+    "AutoHotkey2.CompleteFunctionParens": false,
+    "AutoHotkey2.FormatOptions": {
+        "indent_string": "    "
+    },
+}
