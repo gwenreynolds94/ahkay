@@ -6,6 +6,8 @@
 #Include wink.ahk
 #Include taskbar.ahk
 #Include tip.ahk
+#Include hotpath.ahk
+#Include wincoord.ahk
 ;
 Persistent()
 ;
@@ -20,29 +22,44 @@ else if not __ON_STARTUP__ and __STARTUP_ENABLED__
 tip "AHKayyyyy............."
 ;
 Hotkey "#F5", (*) => Reload()
-Hotkey "+#a", (*) => Run("C:\Program Files\AutoHotkey\v2\AutoHotkey.chm")
-Hotkey "+#w", (*) => (
+
+cpath := hotpath("CapsLock", 1000)
+cpath["r", "r"] := (*)=>Reload()
+cpath["w", "a"] := (*)=>Run("C:\Program Files\AutoHotkey\v2\AutoHotkey.chm")
+cpath["w", "d"] := (*)=>(
     Run("C:\Users\" A_UserName "\proggers\SysInternals\Debugviewpp.exe")
   , WinWait("ahk_exe Debugviewpp.exe")
   , WinActivate()
 )
+cpath.Enable()
 
-wink("000", "#0", "+#0")
-wink("999", "#9", "+#9")
-wink("888", "#8", "+#8")
-wink("777", "#7", "+#7")
-wink("666", "#6", "+#6")
-wink("555", "#5", "+#5")
-wink("444", "#4", "+#4")
-wink("333", "#3", "+#3")
-wink("222", "#2", "+#2")
-wink("111", "#1", "+#1")
-
+wink("000", "+#0", "#0")
+wink("999", "+#9", "#9")
+wink("888", "+#8", "#8")
+wink("777", "+#7", "#7")
+wink("666", "+#6", "#6")
+wink("555", "+#5", "#5")
+wink("444", "+#4", "#4")
+wink("333", "+#3", "#3")
+wink("222", "+#2", "#2")
+wink("111", "+#1", "#1")
 
 sc029 & 1::trans.PrevStep
 sc029 & 2::trans.NextStep
 sc029 & F1::taskbar.autohide.Toggle
 sc029::sc029
+
+#HotIf WinActive("ahk_exe Code.exe")
+XButton1 & RButton::^c
+XButton2 & LButton::^v
+XButton2 & RButton::^x
+XButton1::XButton1
+XButton2::XButton2
+RButton::RButton
+#HotIf
+
+wincoord.EnableMouseSizing()
+wincoord.EnableMouseMoving()
 
 /**
 class KeyHandler {
@@ -267,16 +284,6 @@ X2H.PostRelease.Push((_x2h,*)=>(
 ;     }
 ; }
 ; 
-
-
-#HotIf WinActive("ahk_exe Code.exe")
-XButton1 & LButton::^c
-XButton2 & RButton::^x
-XButton1 & RButton::^v
-XButton1::XButton1
-XButton2::XButton2
-RButton::RButton
-#HotIf
 
 ; #Hotif (X2H.is_down and X1H.is_down)
 ; *$w::Send("{LAlt Down}{w Down}")
