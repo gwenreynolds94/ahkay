@@ -57,15 +57,16 @@ class wincoord {
                 SetTimer(,0)
         }
         SetTimer(MouseSizingLoop, 1)
+        Hotkey this.sizingendkey, this.EndMouseSizing, "On"
     }
-    static __EndMouseSizing(*) => this.mouseIsSizing := false
+    static __EndMouseSizing(*) {
+        Hotkey this.sizingendkey, this.EnableMouseSizing, "Off"
+        this.mouseIsSizing := false
+    }
     static EnableMouseSizing(_beginkey?, _endkey?, *) {
         this.sizingbeginkey := _beginkey ?? this.sizingbeginkey
         this.sizingendkey := _endkey ?? this.sizingendkey
         Hotkey this.sizingbeginkey, this.StartMouseSizing, "On"
-        HotIf this.IsMouseSizing
-        Hotkey this.sizingendkey, this.EndMouseSizing, "On"
-        HotIf
     }
     static __IsMouseMoving(*)=>this.mouseIsMoving
     static __StartMouseMoving(*) {
@@ -90,15 +91,16 @@ class wincoord {
                 SetTimer(,0)
         }
         SetTimer(MouseMovingLoop, 1)
+        Hotkey this.movingendkey, this.EndMouseMoving, "On"
     }
-    static __EndMouseMoving(*) => this.mouseIsMoving := false
+    static __EndMouseMoving(*) {
+        Hotkey this.movingendkey, this.EndMouseMoving, "Off"
+        this.mouseIsMoving := false
+    }
     static EnableMouseMoving(_beginkey?, _endkey?, *) {
         this.movingbeginkey := _beginkey ?? this.movingbeginkey
         this.movingendkey := _endkey ?? this.movingendkey
         Hotkey this.movingbeginkey, this.StartMouseMoving, "On"
-        HotIf this.IsMouseMoving
-        Hotkey this.movingendkey, this.EndMouseMoving, "On"
-        HotIf
     }
     static SetWindowPos(_hwnd, _after_hwnd?, _x?, _y?, _cx?, _cy?, _uflags?) {
 

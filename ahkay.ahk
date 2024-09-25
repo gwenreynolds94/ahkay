@@ -49,17 +49,16 @@ sc029 & 2::trans.NextStep
 sc029 & F1::taskbar.autohide.Toggle
 sc029::sc029
 
+wincoord.EnableMouseSizing()
+wincoord.EnableMouseMoving()
+
 #HotIf WinActive("ahk_exe Code.exe")
 XButton1 & RButton::^c
 XButton2 & LButton::^v
 XButton2 & RButton::^x
 XButton1::XButton1
 XButton2::XButton2
-RButton::RButton
 #HotIf
-
-wincoord.EnableMouseSizing()
-wincoord.EnableMouseMoving()
 
 /**
 class KeyHandler {
