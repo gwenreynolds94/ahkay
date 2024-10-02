@@ -25,6 +25,7 @@ Hotkey "#F5", (*) => Reload()
 
 cpath := hotpath("CapsLock", 1000)
 cpath["r", "r"] := (*)=>Reload()
+cpath["q", "q"] := (*)=>ExitApp()
 cpath["w", "a"] := (*)=>Run("C:\Program Files\AutoHotkey\v2\AutoHotkey.chm")
 cpath["w", "d"] := (*)=>(
     Run("C:\Users\" A_UserName "\proggers\SysInternals\Debugviewpp.exe")
