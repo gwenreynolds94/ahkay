@@ -11,6 +11,7 @@ class wincoord {
         ,  movingendkey := "*LButton Up"
         ,  mouseIsSizing := false
         ,  mouseIsMoving := false
+        ,  curwin := 0
         ,  SWP := { NOSIZE          : 0x0001
                   , NOMOVE          : 0x0002
                   , NOZORDER        : 0x0004
@@ -36,6 +37,8 @@ class wincoord {
     static __StartMouseSizing(*) {
         CoordMode("Mouse", "Screen")
         MouseGetPos(&_mxstart, &_mystart, &_mwin)
+        this.curwin := _mwin
+        SendMessage(0x1666, true,,, _mwin)
         WinGetPos(,,&_winw, &_winh, _mwin)
         this.mouseIsSizing := true
         MouseSizingLoop(*) {
@@ -61,6 +64,8 @@ class wincoord {
     }
     static __EndMouseSizing(*) {
         Hotkey this.sizingendkey, this.EnableMouseSizing, "Off"
+        DetectHiddenWindows true
+        SendMessage(0x1666,,,,this.curwin)
         this.mouseIsSizing := false
     }
     static EnableMouseSizing(_beginkey?, _endkey?, *) {

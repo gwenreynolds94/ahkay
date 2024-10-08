@@ -2,6 +2,7 @@
 #Warn All, OutputDebug
 #SingleInstance Force
 ;
+#Include ahkayini.ahk
 #Include trans.ahk
 #Include wink.ahk
 #Include taskbar.ahk
@@ -11,22 +12,26 @@
 ;
 Persistent()
 ;
-__ON_STARTUP__ := true
-__STARTUP_FILE__ := A_AppData "\Microsoft\Windows\Start Menu\Programs\Startup\ahkay.ahk.lnk"
+__STARTUP_OPT__ := ahkay["startup"]["shortcut"]
+__STARTUP_FILE__ := ahkay["startup"]["shortcut_file"]
 __STARTUP_ENABLED__ := FIleExist(__STARTUP_FILE__)
-if __ON_STARTUP__ and not __STARTUP_ENABLED__
+if __STARTUP_OPT__ and not __STARTUP_ENABLED__
     FileCreateShortcut(A_LineFile, __STARTUP_FILE__)
-else if not __ON_STARTUP__ and __STARTUP_ENABLED__
+else if not __STARTUP_OPT__ and __STARTUP_ENABLED__
     FileDelete(__STARTUP_FILE__)
 ;
 tip "AHKayyyyy............."
 ;
 Hotkey "#F5", (*) => Reload()
-
+;
 cpath := hotpath("CapsLock", 1000)
 cpath["r", "r"] := (*)=>Reload()
 cpath["q", "q"] := (*)=>ExitApp()
-cpath["w", "a"] := (*)=>Run("C:\Program Files\AutoHotkey\v2\AutoHotkey.chm")
+cpath["w", "a"] := (*)=>(
+    Run("C:\Program Files\AutoHotkey\v2\AutoHotkey.chm")
+  , WinWait("ahk_exe hh.exe")
+  , WinActivate()
+)
 cpath["w", "d"] := (*)=>(
     Run("C:\Users\" A_UserName "\proggers\SysInternals\Debugviewpp.exe")
   , WinWait("ahk_exe Debugviewpp.exe")
