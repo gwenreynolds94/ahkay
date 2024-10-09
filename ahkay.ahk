@@ -12,7 +12,11 @@
 ;
 Persistent()
 ;
+tip "AHKay..."
+;
+/** @var {Integer} __STARTUP_OPT__ Controls creation/deletion of startup shortcut */
 __STARTUP_OPT__ := ahkay["startup"]["shortcut"]
+/** @var {String} __STARTUP_FILE__ Location of startup shortcut */
 __STARTUP_FILE__ := ahkay["startup"]["shortcut_file"]
 __STARTUP_ENABLED__ := FIleExist(__STARTUP_FILE__)
 if __STARTUP_OPT__ and not __STARTUP_ENABLED__
@@ -20,10 +24,9 @@ if __STARTUP_OPT__ and not __STARTUP_ENABLED__
 else if not __STARTUP_OPT__ and __STARTUP_ENABLED__
     FileDelete(__STARTUP_FILE__)
 ;
-tip "AHKayyyyy............."
-;
 Hotkey "#F5", (*) => Reload()
 ;
+/** @var {hotpath} cpath A capslock leader key */
 cpath := hotpath("CapsLock", 1000)
 cpath["r", "r"] := (*)=>Reload()
 cpath["q", "q"] := (*)=>ExitApp()

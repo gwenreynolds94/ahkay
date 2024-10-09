@@ -13,10 +13,8 @@ class prefs extends Map {
         if not DirExist(prefs.save_dir)
             DirCreate(prefs.save_dir)
         if not FileExist(this.__path__)
-            IniWrite(A_YYYY "." A_MM "." A_DD "." A_Hour ":" A_Min ":" A_Sec
-                , this.__path__
-                , "info"
-                , "created")
+            IniWrite( A_YYYY "." A_MM "." A_DD "." A_Hour ":" A_Min ":" A_Sec
+                    , this.__path__, "info", "created" )
         this.__LoadFile()
         prefs.all[_name "." _section] := this
         if IsSet(_default_prefs_map)

@@ -4,16 +4,31 @@
 ;
 class hotpath {
     class key extends Map {
+        /** @prop {Integer} _enabled */
         _enabled := false
+        /** @prop {String} keyname the key passed to the Hotkey function */
         keyname := ""
+        /** @prop {Func|Integer} hotif optional custom hotif func object */
         hotif := false
+        /** @prop {Array<Func>} actions func objects to run upon hotkey trigger */
         actions := []
+        /** @prop {Integer} oneshot whether to disable self after actions */
         oneshot := false
+        /** @prop {Integer} timeout amount of ticks to wait before auto-disabling */
         timeout := 0
+        /** @prop {Map} disable_on_trigger keys to disable after actions */
         disable_on_trigger := Map()
         IsHot := ObjBindMethod(this, "__IsHot__")
         RunActions := ObjBindMethod(this, "__RunActions__")
         BndDisable := ObjBindMethod(this, "Disable")
+        /**
+         * 
+         * @param {String} _keyname the key passed to Hotkey function
+         * @param {Integer} [_oneshot=false] whether to disable after triggering actions
+         * @param {Integer} [_timeout] amount of ticks to wait before disabling automatically
+         * @param {Func} [_hotif] an optional custom hotif func object
+         * @param {Array<Func>} [_actions] func object actions to run upon hotkey trigger
+         */
         __New(_keyname, _oneshot:=false, _timeout?, _hotif?, _actions*) {
             this.keyname := _keyname
             this.hotif := _hotif ?? false
@@ -52,10 +67,13 @@ class hotpath {
             HotIf
         }
     }
-    firstkey := ""
+    /** @prop {hotpath.key} firstkey the leader key */
+    firstkey := {}
+    /** @prop {Integer} keytimeout default timeout of subsequently added keys */
     keytimeout := 0
+    /** @prop {Integer} _enabled */
     _enabled := false
-    __New(_firstkeyname, _keytimeout:=1750, *) {
+    __New(_firstkeyname, _keytimeout:=1250, *) {
         this.firstkey := hotpath.key(_firstkeyname)
         this.keytimeout := _keytimeout
     }
