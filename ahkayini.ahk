@@ -1,6 +1,9 @@
 #Include aini.ahk
 
-ahkay := aini("ahkay.ini")
+ahkay_opts_dir := A_AppData "\ahkay"
+if not DirExist(ahkay_opts_dir)
+    DirCreate(ahkay_opts_dir)
+ahkay := aini(ahkay_opts_dir "\ahkay.ini")
 ahkay.UpdateSections("startup", "misc")
 ahkay["startup"].UpdateDefaults(Map(
     "shortcut", true,
