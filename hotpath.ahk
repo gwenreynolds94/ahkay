@@ -10,6 +10,7 @@ class hotpath {
         actions := []
         oneshot := false
         timeout := 0
+        disable_on_trigger := Map()
         IsHot := ObjBindMethod(this, "__IsHot__")
         RunActions := ObjBindMethod(this, "__RunActions__")
         BndDisable := ObjBindMethod(this, "Disable")
@@ -29,6 +30,8 @@ class hotpath {
                     _nextkey.Enable()
             if this.oneshot
                 this.Disable()
+            for _prevkeyname, _prevkey in this.disable_on_trigger
+                _prevkey.Disable()
         }
         Enable(*) {
             if this._enabled
@@ -75,6 +78,9 @@ class hotpath {
             for _key in _keypath {
                 if not recentfound.Has(_key)
                     recentfound[_key] := hotpath.key(_key, true, this.keytimeout)
+                for _keyname, _keyvalue in recentfound
+                    if _keyname != _key and not recentfound[_key].disable_on_trigger.Has(_keyname)
+                        recentfound[_key].disable_on_trigger[_keyname] := _keyvalue
                 recentfound := recentfound[_key]
             }
             recentfound.actions.Push Value

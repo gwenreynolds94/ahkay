@@ -37,6 +37,7 @@ cpath["w", "d"] := (*)=>(
   , WinWait("ahk_exe Debugviewpp.exe")
   , WinActivate()
 )
+cpath["w", "f"] := (*)=>Run("floorp.exe")
 cpath.Enable()
 
 wink("000", "+#0", "#0")
