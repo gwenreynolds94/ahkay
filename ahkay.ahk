@@ -32,15 +32,14 @@ cpath["r", "r"] := (*)=>Reload()
 cpath["q", "q"] := (*)=>ExitApp()
 cpath["w", "a"] := (*)=>(
     Run("C:\Program Files\AutoHotkey\v2\AutoHotkey.chm")
-  , WinWait("ahk_exe hh.exe")
-  , WinActivate()
+  , WinWait("ahk_exe hh.exe"), WinActivate()
 )
 cpath["w", "d"] := (*)=>(
     Run("C:\Users\" A_UserName "\proggers\SysInternals\Debugviewpp.exe")
-  , WinWait("ahk_exe Debugviewpp.exe")
-  , WinActivate()
+  , WinWait("ahk_exe Debugviewpp.exe"), WinActivate()
 )
 cpath["w", "f"] := (*)=>Run("floorp.exe")
+cpath["w", "c"] := (*)=>Run("code")
 cpath.Enable()
 
 wink("000", "+#0", "#0")

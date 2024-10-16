@@ -3,6 +3,7 @@
 ahkay_opts_dir := A_AppData "\ahkay"
 if not DirExist(ahkay_opts_dir)
     DirCreate(ahkay_opts_dir)
+/** @var {aini} ahkay */
 ahkay := aini(ahkay_opts_dir "\ahkay.ini")
 ahkay.UpdateSections("startup", "misc")
 ahkay["startup"].UpdateDefaults(Map(

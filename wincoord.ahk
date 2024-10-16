@@ -39,7 +39,7 @@ class wincoord {
         MouseGetPos(&_mxstart, &_mystart, &_mwin)
         this.curwin := _mwin
         SendMessage(0x1666, true,,, _mwin)
-        WinGetPos(,,&_winw, &_winh, _mwin)
+        wrect := wincoord.GetWindowRect(_mwin)
         this.mouseIsSizing := true
         MouseSizingLoop(*) {
             static mxrecent := _mxstart
@@ -48,11 +48,11 @@ class wincoord {
             SetWinDelay -1
             MouseGetPos(&_mxcurrent, &_mycurrent)
             if (_mxcurrent != mxrecent) or (_mycurrent != myrecent) {
-                neww := _winw + (_mxcurrent - _mxstart)
-                newh := _winh + (_mycurrent - _mystart)
+                neww := wrect.w + (_mxcurrent - _mxstart)
+                newh := wrect.h + (_mycurrent - _mystart)
                 neww := (neww < 200) ? 200 : neww
                 newh := (newh < 200) ? 200 : newh
-                WinMove(,,neww,newh,_mwin)
+                wincoord.SetWindowPos(_mwin,,,,neww,newh)
             }
             mxrecent := _mxcurrent
             myrecent := _mycurrent
@@ -77,7 +77,7 @@ class wincoord {
     static __StartMouseMoving(*) {
         CoordMode("Mouse", "Screen")
         MouseGetPos(&_mxstart, &_mystart, &_mwin)
-        WinGetPos(&_winx, &_winy,,, _mwin)
+        wrect := wincoord.GetWindowRect(_mwin)
         this.mouseIsMoving := true
         MouseMovingLoop(*) {
             static mxrecent := _mxstart
@@ -86,9 +86,9 @@ class wincoord {
             SetWinDelay -1
             MouseGetPos(&_mxcurrent, &_mycurrent)
             if (_mxcurrent != mxrecent) or (_mycurrent != myrecent) {
-                newx := _winx + (_mxcurrent - _mxstart)
-                newy := _winy + (_mycurrent - _mystart)
-                WinMove(newx,newy,,,_mwin)
+                newx := wrect.x + (_mxcurrent - _mxstart)
+                newy := wrect.y + (_mycurrent - _mystart)
+                wincoord.SetWindowPos(_mwin,,newx,newy)
             }
             mxrecent := _mxcurrent
             myrecent := _mycurrent
@@ -107,8 +107,33 @@ class wincoord {
         this.movingendkey := _endkey ?? this.movingendkey
         Hotkey this.movingbeginkey, this.StartMouseMoving, "On"
     }
-    static SetWindowPos(_hwnd, _after_hwnd?, _x?, _y?, _cx?, _cy?, _uflags?) {
-
+    static SetWindowPos(_hwnd, _after_hwnd:=false, _x?, _y?, _cx?, _cy?, _uflags?) {
+        if IsSet(_uflags) {
+            uflags := _uflags
+        } else {
+            uflags := wincoord.SWP.NOZORDER
+            if not IsSet(_x) and not IsSet(_y)
+                uflags |= wincoord.SWP.NOMOVE
+            if not IsSet(_cx) and not IsSet(_cy)
+                uflags |= wincoord.SWP.NOSIZE
+        }
+        DllCall "SetWindowPos", "Ptr", _hwnd
+                              , "Int", _after_hwnd
+                              , "Int", _x ?? 0, "Int", _y ?? 0
+                              , "Int", _cx ?? 0, "Int", _cy ?? 0
+                              , "UInt", uflags
+    }
+    static GetWindowRect(_hwnd) {
+        wRECT := Buffer(16)
+        DllCall "GetWindowRect", "Ptr", _hwnd, "Ptr", wRECT
+        return {
+            x: _x:=NumGet(wRECT, 0, "Int")
+          , y: _y:=NumGet(wRECT, 4, "Int")
+          , cx: _cx:=NumGet(wRECT, 8, "Int")
+          , cy: _cy:=NumGet(wRECT, 12, "Int")
+          , w: _cx-_x
+          , h: _cy-_y
+        }
     }
 }
 ;

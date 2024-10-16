@@ -2,6 +2,9 @@
 #Warn All, OutputDebug
 #SingleInstance Force
 ;
+/**
+ * A helper class for leader key logic
+ */
 class hotpath {
     class key extends Map {
         /** @prop {Integer} _enabled */
@@ -10,11 +13,11 @@ class hotpath {
         keyname := ""
         /** @prop {Func|Integer} hotif optional custom hotif func object */
         hotif := false
-        /** @prop {Array<Func>} actions func objects to run upon hotkey trigger */
+        /** @prop {Array<Func>} actions func objects to run on hotkey trigger */
         actions := []
         /** @prop {Integer} oneshot whether to disable self after actions */
         oneshot := false
-        /** @prop {Integer} timeout amount of ticks to wait before auto-disabling */
+        /** @prop {Integer} timeout ticks to wait before auto-disabling */
         timeout := 0
         /** @prop {Map} disable_on_trigger keys to disable after actions */
         disable_on_trigger := Map()
@@ -24,10 +27,10 @@ class hotpath {
         /**
          * 
          * @param {String} _keyname the key passed to Hotkey function
-         * @param {Integer} [_oneshot=false] whether to disable after triggering actions
-         * @param {Integer} [_timeout] amount of ticks to wait before disabling automatically
+         * @param {Integer} [_oneshot=false] whether to disable after trigger
+         * @param {Integer} [_timeout] ticks to wait before auto-disabling
          * @param {Func} [_hotif] an optional custom hotif func object
-         * @param {Array<Func>} [_actions] func object actions to run upon hotkey trigger
+         * @param {Array<Func>} [_actions] func objects to run on hotkey trigger
          */
         __New(_keyname, _oneshot:=false, _timeout?, _hotif?, _actions*) {
             this.keyname := _keyname
