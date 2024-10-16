@@ -6,12 +6,19 @@
 ;
 class wincoord {
     static sizingbeginkey := "#RButton"
-        ,  sizingendkey := "*RButton Up"
         ,  movingbeginkey := "#LButton"
-        ,  movingendkey := "*LButton Up"
         ,  mouseIsSizing := false
         ,  mouseIsMoving := false
+        ,  movingendkey := "*LButton Up"
+        ,  sizingendkey := "*RButton Up"
         ,  curwin := 0
+        ,  StartMouseSizing := ObjBindMethod(this, "__StartMouseSizing")
+        ,  StartMouseMoving := ObjBindMethod(this, "__StartMouseMoving")
+        ,  EndMouseSizing := ObjBindMethod(this, "__EndMouseSizing")
+        ,  EndMouseMoving := ObjBindMethod(this, "__EndMouseMoving")
+        ,  IsMouseSizing := ObjBindMethod(this, "__IsMouseSizing")
+        ,  IsMouseMoving := ObjBindMethod(this, "__IsMouseMoving")
+        /** @prop {Object} SWP Constants for use by SetWindowPos */
         ,  SWP := { NOSIZE          : 0x0001
                   , NOMOVE          : 0x0002
                   , NOZORDER        : 0x0004
@@ -27,12 +34,6 @@ class wincoord {
                   , HWND_TOP        : 0
                   , HWND_TOPMOST    : -1
                   , HWND_NOTTOPMOST : -2 }
-        ,  StartMouseSizing := ObjBindMethod(this, "__StartMouseSizing")
-        ,  EndMouseSizing := ObjBindMethod(this, "__EndMouseSizing")
-        ,  IsMouseSizing := ObjBindMethod(this, "__IsMouseSizing")
-        ,  StartMouseMoving := ObjBindMethod(this, "__StartMouseMoving")
-        ,  EndMouseMoving := ObjBindMethod(this, "__EndMouseMoving")
-        ,  IsMouseMoving := ObjBindMethod(this, "__IsMouseMoving")
     static __IsMouseSizing(*)=>this.mouseIsSizing
     static __StartMouseSizing(*) {
         CoordMode("Mouse", "Screen")
@@ -63,7 +64,7 @@ class wincoord {
         Hotkey this.sizingendkey, this.EndMouseSizing, "On"
     }
     static __EndMouseSizing(*) {
-        Hotkey this.sizingendkey, this.EnableMouseSizing, "Off"
+        Hotkey this.sizingendkey, this.EndMouseSizing, "Off"
         DetectHiddenWindows true
         SendMessage(0x1666,,,,this.curwin)
         this.mouseIsSizing := false
