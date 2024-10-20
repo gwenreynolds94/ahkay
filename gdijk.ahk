@@ -399,7 +399,10 @@ Gdip_BitmapFromHWND(hwnd)
 CreateRectF(&RectF, x, y, w, h)
 {
 	RectF := Buffer(16)
-	NumPut("float", x, RectF, 0), NumPut("float", y, RectF, 4), NumPut("float", w, RectF, 8), NumPut("float", h, RectF, 12)
+	NumPut("Float", x, RectF, 0)
+	NumPut("Float", y, RectF, 4)
+	NumPut("Float", w, RectF, 8)
+	NumPut("Float", h, RectF, 12)
 }
 
 ;#####################################################################################
@@ -2639,11 +2642,15 @@ Gdip_SetCompositingMode(pGraphics, CompositingMode:=0)
 ;#####################################################################################
 
 class GdipCache {
+	static Startup := ObjBindMethod(GdipCache, "__Startup")
+		,  Shutdown := ObjBindMethod(GdipCache, "__Shutdown")
     static __New() {
-        Gdip_Startup()
-        OnExit Gdip_Shutdown.bind(GdipCache.pToken)
+        GdipCache.Startup()
+        OnExit GdipCache.Shutdown
     }
     static pToken := 0x0
+	static __Startup(*) => Gdip_Startup()
+	static __Shutdown(*) => Gdip_Shutdown(GdipCache.pToken)
 }
 
 class GdipBitmap {
@@ -2735,6 +2742,7 @@ Gdip_Shutdown(_pToken, *)
 	DllCall("gdiplus\GdiplusShutdown", Ptr, _pToken)
 	if hModule := DllCall("GetModuleHandle", "str", "gdiplus", Ptr)
 		DllCall("FreeLibrary", Ptr, hModule)
+	GdipCache.pToken := false
 	return 0
 }
 
