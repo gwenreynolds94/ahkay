@@ -9,8 +9,12 @@
 #Include tip.ahk
 #Include hotpath.ahk
 #Include wincoord.ahk
+#Include win10sndwhl.ahk
 ;
 Persistent()
+;
+if not A_IsAdmin
+    Run "*RunAs " A_ScriptFullPath
 ;
 tip "AHKay..."
 ;
@@ -26,19 +30,232 @@ else if not __STARTUP_OPT__ and __STARTUP_ENABLED__
 ;
 Hotkey "#F5", (*) => Reload()
 ;
+;
+ToggleAlwaysOnTop(*) {
+    WinSetAlwaysOnTop(-1, WinExist("A"))
+}
+;
+;
+class MarvelRivals {
+    static Enter := ObjBindMethod(this, "__Enter__")
+        ,  KeyColors := Map(
+              "White"     , "W"
+            , "Yellow"    , "Y"
+            , "Orange"      , "O"
+            , "Red"       , "R"
+            , "Purple"    , "P"
+            , "Magenta"     , "M"
+            , "Lavender"    , "U"
+            , "Blue"      , "B"
+            , "LightBlue"   , "I"
+            , "Aqua"      , "A"
+            , "Teal"      , "T"
+            , "Green"     , "G"
+            , "YellowGreen" , "E"
+            , "Lemon"       , "K"
+        )
+        ,  InfoColors := Map(
+              "Info"    , "LightBlue"
+            , "Nice"    , "Lavender"
+            , "Bad"     , "Orange"
+            , "Notice"  , "Lemon"
+            , "Fun"     , "Teal"
+            , "Good"    , "Green"
+            , "Warn"    , "Yellow"
+            , "Error"   , "Purple"
+        )
+        ,  FavColors := 
+            [ "Yellow" , "Purple"
+            , "Teal"   , "Green"
+            , "Lavender" , "LightBlue"
+            , "Lemon"    , "Orange" ]
+        ,  SpiderLyricsCollection := [
+            [
+                "Spooky spooky spiders in my room",
+                "Spooky spooky spiders in my room",
+                "I can see you crawling on my roof",
+                "The spooky spooky spiders crawl in my shoes",
+                "I can see you shaking in your bed",
+                "I can see the spooky in your head"
+            ],
+            [
+                "Spider crawling on the wall",
+                "I seem him and he sees it all",
+                "Spider crawling in my left ear",
+                "Has a message I want you to hear",
+                "Spider crawling, I crawl with him",
+                "We go everywhere, we see everything"
+            ],
+            [
+                "Daddy come quick",
+                "There's a spider in my bed",
+                "I need help, on the shelf",
+                "Daddy help me, help me, help me",
+                "Get it out, out, out, out, out, out, out",
+                "It bit me ow, ow, ow, ow",
+                "That really hurt",
+                "I will wait until the web is spun before I call you back",
+                "I'm waiting 'til the moonlight vibes a web and I attack"
+            ],
+            [
+                "Let me just introduce you to my friend",
+                "Under the tree, spider and me",
+                "Love from a spider is nothing stranger",
+                "Than my admiring love of nature",
+                "Spider and me",
+                "Spider and me",
+                "Laze in the afternoon sun",
+                "Gazing at each other's beauty"
+            ],
+            [
+                "She's got spiders inside her head",
+                "She's in danger, she's easily led",
+                "Lookout Johnny she's got spiders inside her head",
+                "She can't control her baby spiders",
+                "She wants them dead"
+            ]
+        ]
+        ,  ColorInput := ObjBindMethod(this, "__ColorInput__")
+        , RainbowInput := ObjBindMethod(this, "__RainbowInput__")
+        , SpiderLyrics := ObjBindMethod(this, "__SpiderLyrics__")
+        , SpiderLyricsAlt := ObjBindMethod(this, "__SpiderLyricsAlt__")
+    Static __New() {
+        ;
+    }
+    static __Enter__(*)=> ( SetKeyDelay(,25), SendEvent("{Enter}") )
+    static __ColorInput__(_color:="Lavender", _input:="", *)=> (
+            SetKeyDelay(25,25),
+                SendEvent("{Enter}{#}" this.KeyColors[_color] "{Space}"),
+            SetKeyDelay(0,-1),
+                Send(_input)
+        )
+    static __RainbowInput__(*) {
+        _input_obj := InputBox("Enter text to rainbowify:", "Rainbow Input")
+        _input_left := _input_right := ""
+        _key_color_len := this.FavColors.Length
+        _key_color_pos := 0
+        if _input_obj.Result = "OK"
+            _input_right := _input_obj.Value
+        else return
+        Loop StrLen(_input_right)
+            _input_left .= "#" this.KeyColors[this.FavColors[Mod(_key_color_pos++, _key_color_len)+1]] SubStr(_input_right, A_Index, 1)
+        A_Clipboard := _input_left
+    }
+    static __SpiderLyrics__(*) {
+        static lyrics_index := 1
+
+        current_lyrics := this.SpiderLyricsCollection[lyrics_index]
+        SetKeyDelay(15,15)
+        SendEvent("{Enter}")
+        for _line in current_lyrics
+            SendEvent(_line "{Enter}")
+
+        lyrics_index++
+        if lyrics_index > this.SpiderLyricsCollection.Length
+            lyrics_index := 1
+    }
+    static __SpiderLyricsAlt__(*) {
+        static lyrics_index := 1
+
+        current_lyrics := this.SpiderLyricsCollection[lyrics_index]
+        SetKeyDelay(15,15)
+        for _line in current_lyrics
+            SendEvent("{Enter}"), Sleep(300), SendEvent(_line), Sleep(200), SendEvent("{Enter}"), Sleep(350)
+
+        lyrics_index++
+        if lyrics_index > this.SpiderLyricsCollection.Length
+            lyrics_index := 1
+    }
+}
+!Home::{
+    static isMoving := false
+         , interval := 1
+
+    MoveMouseALittle(*) {
+        MouseMove(600, 0, 1, "R")
+        if not isMoving
+            SetTimer , 0
+    }
+
+    if isMoving
+        isMoving := false
+    else isMoving := true, SetTimer(MoveMouseALittle, interval)
+}
+!End::{
+    static isMoving := false
+         , interval := 1
+
+    MoveMouseALittle(*) {
+        static dir := 1
+        MouseMove(600 * dir, 0, 1, "R")
+        dir *= -1
+        if not isMoving
+            SetTimer , 0
+    }
+
+    if isMoving
+        isMoving := false
+    else isMoving := true, SetTimer(MoveMouseALittle, interval)
+}
+!PgUp::{
+    static isMoving := false
+         , interval := 1
+
+    MoveMouseALittle(*) {
+        static dir := 1
+        MouseMove(6 * dir, 0, 1, "R")
+        dir *= -1
+        if not isMoving
+            SetTimer , 0
+    }
+
+    if isMoving
+        isMoving := false
+    else isMoving := true, SetTimer(MoveMouseALittle, interval)
+}
+;
+;
 /** @var {hotpath} cpath A capslock leader key */
-cpath := hotpath("CapsLock", 1000)
+cpath := hotpath("CapsLock", 850)
+cpath["d", "d"] := MarvelRivals.Enter
+cpath["t", "t"] := MarvelRivals.RainbowInput
+for _color in MarvelRivals.FavColors
+    cpath["d", A_Index] := MarvelRivals.ColorInput.Bind(MarvelRivals.FavColors[A_Index], "")
+cpath["d", "f"] := MarvelRivals.SpiderLyrics
+cpath["d", "g"] := MarvelRivals.SpiderLyricsAlt
+; cpath["d", "i"] := MarvelRivals.ColorInput.Bind(MarvelRivals.InfoColors["Info"], "")
+; cpath["d", "g"] := MarvelRivals.ColorInput.Bind(MarvelRivals.InfoColors["Good"], "")
+; cpath["d", "t"] := MarvelRivals.ColorInput.Bind(MarvelRivals.InfoColors["Bad"], "")
+; cpath["d", "n"] := MarvelRivals.ColorInput.Bind(MarvelRivals.InfoColors["Nice"], "")
+; cpath["d", "f"] := MarvelRivals.ColorInput.Bind(MarvelRivals.InfoColors["Fun"], "")
+; cpath["d", "k"] := MarvelRivals.ColorInput.Bind(MarvelRivals.InfoColors["Notice"], "")
+; cpath["d", "d"] := MarvelRivals.ColorInput.Bind(MarvelRivals.InfoColors["Warn"], "")
+; cpath["d", "e"] := MarvelRivals.ColorInput.Bind(MarvelRivals.InfoColors["Error"], "")
+; cpath["e", "1"] := (*)=>Send("{Numpad1}")
+; cpath["e", "2"] := (*)=>Send("{Numpad2}")
+; cpath["e", "3"] := (*)=>Send("{Numpad3}")
+; cpath["e", "4"] := (*)=>Send("{Numpad4}")
+; cpath["e", "5"] := (*)=>Send("{Numpad5}")
+; cpath["e", "6"] := (*)=>Send("{Numpad6}")
+; cpath["e", "7"] := (*)=>Send("{Numpad7}")
+cpath["b", "s"] := (*)=>Send("(•⩊•)")
+cpath["b", "v"] := (*)=>Send("{Raw}(ﾉ>ω<)ﾉ ✿:｡･:*:･ﾟ’★,｡✿･:*:･ﾟ’☆✿")
+cpath["b", "g"] := (*)=>Send("{Raw}(/￣ー￣)/~~☆’.･.･:★’.･.･:☆")
+cpath["v", "v"] := (*)=>Send("{Raw}(=^･ω･^=)")
+cpath["v", "c"] := (*)=>Send("{Raw}(⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)")
+cpath["v", "f"] := (*)=>Send("{Raw}(^人^)")
 cpath["r", "r"] := (*)=>Reload()
 cpath["q", "q"] := (*)=>ExitApp()
+cpath["a", "a"] := (*)=>ToggleAlwaysOnTop()
 cpath["w", "a"] := (*)=>(
     Run("C:\Program Files\AutoHotkey\v2\AutoHotkey.chm")
   , WinWait("ahk_exe hh.exe"), WinActivate()
 )
 cpath["w", "d"] := (*)=>(
-    Run("C:\Users\" A_UserName "\proggers\SysInternals\Debugviewpp.exe")
+    Run("C:\Users\" A_UserName "\proggers\Debugviewpp.exe")
   , WinWait("ahk_exe Debugviewpp.exe"), WinActivate()
 )
-cpath["w", "f"] := (*)=>Run("floorp.exe")
+cpath["w", "f"] := (*)=>Run("C:\Program Files\Ablaze Floorp\floorp.exe")
 cpath["w", "c"] := (*)=>Run("code")
 cpath.Enable()
 
@@ -58,6 +275,18 @@ sc029 & 2::trans.NextStep
 sc029 & F1::taskbar.autohide.Toggle
 sc029::sc029
 
+#F12::{
+    current_out := SoundGetName()
+    if (InStr(current_out, "DT"))
+        Run "nircmd-x64\nircmd.exe setdefaultsounddevice PebbleSpeakers"
+    else if (InStr(current_out, "Pebble"))
+        Run "nircmd-x64\nircmd.exe setdefaultsounddevice RazerHeadphones"
+    else Run "nircmd-x64\nircmd.exe setdefaultsounddevice DTHeadphones"
+
+}
+; Speakers (Razer Kraken V4 - Game)
+; Speakers (Creative Pebble X Plus)
+
 wincoord.EnableMouseSizing()
 wincoord.EnableMouseMoving()
 
@@ -68,6 +297,8 @@ XButton2 & RButton::^x
 XButton1::XButton1
 XButton2::XButton2
 #HotIf
+; #include numoji.ahk
+; sc029 & q::CopyMote
 
 /**
 class KeyHandler {

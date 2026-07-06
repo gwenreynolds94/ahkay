@@ -20,6 +20,7 @@ class trans {
         return steps
     }
     static __PrevStep(_wintitle?, *) {
+        DetectHiddenWindows true
         wHWND := WinExist(_wintitle ?? "A")
         if not wHWND
             return
@@ -32,12 +33,14 @@ class trans {
                 break
             }
         }
-        WinSetTransparent(prevStep, wHWND)
+        try
+            WinSetTransparent(prevStep, wHWND)
         dbgo("trans:" wHWND, prevStep)
         Tooltip prevStep
         SetTimer((*) => Tooltip(), -2000)
     }
     static __NextStep(_wintitle?, *) {
+        DetectHiddenWindows true
         wHWND := WinExist(_wintitle ?? "A")
         if not wHWND
             return
@@ -49,7 +52,8 @@ class trans {
                 break
             }
         }
-        WinSetTransparent(nextStep, wHWND)
+        try
+            WinSetTransparent(nextStep, wHWND)
         dbgo("trans:" wHWND, nextStep)
         Tooltip nextStep
         SetTimer((*) => Tooltip(), -2000)
